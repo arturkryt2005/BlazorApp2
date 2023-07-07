@@ -5,8 +5,10 @@
 <h1>TEST</h1>
 <h3>Task Processing</h3>
 
-<textarea rows="10" @bind="inputData"></textarea>
-<button @onclick="ProcessData">Process</button>
+<div class="input-container">
+    <textarea rows="10" @bind="inputData" class="input-textarea"></textarea>
+    <button @onclick="ProcessData" class="process-button">Process</button>
+</div>
 @if (taskSets != null)
 {
     @foreach (var taskSet in taskSets)
