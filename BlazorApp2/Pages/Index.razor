@@ -3,6 +3,73 @@
 <PageTitle>TEST</PageTitle>
 
 <h1>TEST</h1>
+<h3>Task Processing</h3>
 
-<textarea placeholder="Заполни данными"></textarea>
+<textarea rows="10" @bind="inputData"></textarea>
+<button @onclick="ProcessData">Process</button>
+@if (taskSets != null)
+{
+    @foreach (var taskSet in taskSets)
+    {
+        <h4>Task Set</h4>
+        <ul>
+            @foreach (var task in taskSet.Tasks)
+            {
+                <li>End Time: @task.EndTime</li>
+            }
+        </ul>
+    }
+}
+@code {
+    
+    private string inputData;
+    private List<TaskSet> taskSets;
+
+    private void ProcessData()
+    {
+        var inputLines = inputData.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+
+        var setsCount = int.Parse(inputLines[0]);
+
+        var currentIndex = 1;
+        taskSets = new List<TaskSet>();
+
+        for (var i = 0; i < setsCount; i++)
+        {
+            var tasksCount = int.Parse(inputLines[currentIndex]);
+            currentIndex++;
+
+            var tasks = new List<Task>();
+
+            for (var j = 0; j < tasksCount; j++)
+            {
+                var taskData = inputLines[currentIndex].Split(" ");
+                var startTime = int.Parse(taskData[0]);
+                var duration = int.Parse(taskData[1]);
+
+                var endTime = startTime + duration;
+
+                tasks.Add(new Task { StartTime = startTime, Duration = duration, EndTime = endTime });
+
+                currentIndex++;
+            }
+
+            taskSets.Add(new TaskSet { Tasks = tasks });
+            currentIndex++;
+        }
+    }
+
+    public class TaskSet
+    {
+        public List<Task> Tasks { get; set; }
+    }
+
+    public class Task
+    {
+        public int StartTime { get; set; }
+        public int Duration { get; set; }
+        public int EndTime { get; set; }
+    }
+
+}
 
